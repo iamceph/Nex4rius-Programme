@@ -148,7 +148,7 @@ function anzeigen(tankneu)
   local maxanzahl = #tankneu
   local AnzahlSchmal = 0
   local vierteSpalteAnzahl = 0
-  if maxanzahl <= 10 and maxanzahl ~= 0 then
+  if maxanzahl <= 9 and maxanzahl ~= 0 then
     gpu.setResolution(160, maxanzahl * 5)
   elseif maxanzahl <= 16 and maxanzahl ~= 0 then
     gpu.setResolution(160, maxanzahl * 3)
@@ -248,7 +248,7 @@ function zeigeHier(x, y, label, name, menge, maxmenge, prozent, links, rechts, b
   Farben(farben[name][1], farben[name][2])
   local ende = 0
   for i = 1, math.floor(breite * menge / maxmenge) do
-    if maxanzahl <= 10 then
+    if maxanzahl <= 9 then
       gpu.set(x, y, string.format("  %s  ", nachricht[i]), true)
     else
       gpu.set(x, y, string.format(" %s ", nachricht[i]), true)
@@ -258,7 +258,7 @@ function zeigeHier(x, y, label, name, menge, maxmenge, prozent, links, rechts, b
   end
   Farben(farben[name][3], farben[name][4])
   for i = 1, breite - math.floor(breite * menge / maxmenge) do
-    if maxanzahl <= 10 then
+    if maxanzahl <= 9 then
       gpu.set(x, y, string.format("  %s  ", nachricht[i + ende]), true)
     else
       gpu.set(x, y, string.format(" %s ", nachricht[i + ende]), true)
