@@ -142,14 +142,15 @@ function anzeigen(tankneu)
   if debug then
     require("term").clear()
   end
-  local x = 1
-  local y = 1
+  local x, y = 1, 1
   local leer = true
   local anzahl = 0
   local maxanzahl = #tankneu
   local AnzahlSchmal = 0
   local vierteSpalteAnzahl = 0
-  if maxanzahl <= 16 and maxanzahl ~= 0 then
+  if maxanzahl <= 10 and maxanzahl ~= 0 then
+    gpu.setResolution(160, maxanzahl * 5)
+  elseif maxanzahl <= 16 and maxanzahl ~= 0 then
     gpu.setResolution(160, maxanzahl * 3)
   else
     gpu.setResolution(160, 48)
@@ -192,7 +193,7 @@ function anzeigen(tankneu)
     if label == "fluidhelium3" then
       label = "Helium-3"
     end
-    zeigeHier(x, y, label, name, menge, maxmenge, string.format("%s%s", string.rep(" ", 8 - string.len(prozent)), prozent), links, rechts, breite, string.sub(string.format(" %s", label), 1, 28))
+    zeigeHier(x, y, label, name, menge, maxmenge, string.format("%s%s", string.rep(" ", 8 - string.len(prozent)), prozent), links, rechts, breite, string.sub(string.format(" %s", label), 1, 28), maxanzahl)
     y = y + 3
     if debug then
       gpu.set(x, y - 1, string.format("%s   %s    ", anzahl, AnzahlSchmal))
@@ -214,7 +215,7 @@ function zeichenErsetzen(...)
   return string.gsub(..., "%a+", function (str) return ersetzen[str] end)
 end
 
-function zeigeHier(x, y, label, name, menge, maxmenge, prozent, links, rechts, breite, nachricht)
+function zeigeHier(x, y, label, name, menge, maxmenge, prozent, links, rechts, breite, nachricht, maxanzahl)
   if farben[name] == nil and debug then
     nachricht = string.format("%s  %s  >>report this liquid<<<  %smb / %smb  %s", name, label, menge, maxmenge, prozent)
     nachricht = split(nachricht .. string.rep(" ", breite - string.len(nachricht)))
@@ -247,13 +248,21 @@ function zeigeHier(x, y, label, name, menge, maxmenge, prozent, links, rechts, b
   Farben(farben[name][1], farben[name][2])
   local ende = 0
   for i = 1, math.floor(breite * menge / maxmenge) do
-    gpu.set(x, y, string.format(" %s ", nachricht[i]), true)
+    if maxanzahl <= 10 then
+      gpu.set(x, y, string.format("  %s  ", nachricht[i]), true)
+    else
+      gpu.set(x, y, string.format(" %s ", nachricht[i]), true)
+    end
     x = x + 1
     ende = i
   end
   Farben(farben[name][3], farben[name][4])
   for i = 1, breite - math.floor(breite * menge / maxmenge) do
-    gpu.set(x, y, string.format(" %s ", nachricht[i + ende]), true)
+    if maxanzahl <= 10 then
+      gpu.set(x, y, string.format("  %s  ", nachricht[i + ende]), true)
+    else
+      gpu.set(x, y, string.format(" %s ", nachricht[i + ende]), true)
+    end
     x = x + 1
   end
 end
