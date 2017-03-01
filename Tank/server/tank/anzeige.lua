@@ -25,7 +25,7 @@ local letzteNachricht = c.uptime()
 local standby         = function() end
 
 if fs.exists("/bin/standby.lua") then
-  standby             = require("standby")
+  standby = require("standby")
 end
 
 if fs.exists("/tank/version.txt") then
@@ -143,11 +143,10 @@ function anzeigen(tankneu)
     require("term").clear()
   end
   local x, y = 1, 1
-  local leer = true
   local anzahl = 0
   local maxanzahl = #tankneu
-  local AnzahlSchmal = 0
-  local vierteSpalteAnzahl = 0
+  local linksAnzahlSchmal, rechtsAnzahlSchmal = 0, 0
+  local kleineSpalteAnzahl = 0
   if maxanzahl <= 9 and maxanzahl ~= 0 then
     gpu.setResolution(160, maxanzahl * 5)
   elseif maxanzahl <= 16 and maxanzahl ~= 0 then
@@ -165,9 +164,22 @@ function anzeigen(tankneu)
     elseif (64 - maxanzahl) >= anzahl and maxanzahl > 16 then
       links, rechts = 0, 0
       breite = 80
-    elseif anzahl <= 16 then
-      AnzahlSchmal = AnzahlSchmal + 1
     end
+    
+    if anzahl <= 16 and maxanzahl > 48 then
+      linksAnzahlSchmal = linksAnzahlSchmal + 1
+    elseif anzahl > 16 and maxanzahl <= 48 then
+      rechtsAnzahlSchmal = rechtsAnzahlSchmal + 1
+    end
+    if maxanzahl <= 16 then
+      links, rechts, breite = 40, 40, 160
+    if maxanzahl <= 32 then´
+      links, rechts, breite = 0, 0, 80
+    end
+    
+    
+    
+    
     if anzahl == 17 or anzahl == 33 or anzahl == 49 then
       if maxanzahl > 48 and anzahl > 48 then
         x = 41
@@ -206,7 +218,7 @@ function anzeigen(tankneu)
     gpu.set(x, y + 2, string.rep(" ", 80))
     y = y + 3
   end
-  if leer then
+  if anzahl == 0 then
     keineDaten()
   end
 end
