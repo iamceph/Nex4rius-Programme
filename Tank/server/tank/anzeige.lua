@@ -143,6 +143,7 @@ function anzeigen(tankneu)
     require("term").clear()
   end
   local x, y = 1, 1
+  local Spalte, Zeile = 1, 1
   local anzahl = 0
   local maxanzahl = #tankneu
   local linksAnzahlSchmal, rechtsAnzahlSchmal = 0, 0
@@ -177,9 +178,7 @@ function anzeigen(tankneu)
       links, rechts, breite = 0, 0, 80
     end
     
-    
-    
-    
+    --[[
     if anzahl == 17 or anzahl == 33 or anzahl == 49 then
       if maxanzahl > 48 and anzahl > 48 then
         x = 41
@@ -197,6 +196,7 @@ function anzeigen(tankneu)
         y = 1
       end
     end
+    --]]
     local name = string.gsub(tankneu[i].name, "%p", "")
     local label = zeichenErsetzen(string.gsub(tankneu[i].label, "%p", ""))
     local menge = tankneu[i].menge
